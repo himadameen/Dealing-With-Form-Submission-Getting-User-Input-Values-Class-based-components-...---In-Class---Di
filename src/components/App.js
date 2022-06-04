@@ -1,22 +1,37 @@
 import React, { useState } from "react";
 import "../styles/App.css";
-const App = () => {
-  let date = new Date().toLocaleDateString();
-  let time = new Date().toLocaleTimeString();
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      time: new Date().toLocaleTimeString(),
+      date: new Date().toLocaleDateString()
+    };
+  }
 
-  const [running, setRunning] = useState(time);
+  runningTime() {
+    this.setState({
+      time: new Date().toLocaleTimeString()
+    });
+  }
 
-  const liveTime = () => {
-    time = new Date().toLocaleTimeString();
-    setRunning(time);
-  };
-  setInterval(liveTime, 1000);
+  componentDidMount() {
+    this.timer = setInterval(() => this.runningTime(), 1000);
+  }
 
-  return (
-    <div id="main">
-      <div className="date-time">{date + ", " + running}</div>
-    </div>
-  );
-};
+  componentWillUnmount() {
+    clearInterval(this.timer);
+  }
+
+  render() {
+    return (
+      <>
+        <div className="date-time">
+          {this.state.date + ", " + this.state.time}
+        </div>
+      </>
+    );
+  }
+}
 
 export default App;
